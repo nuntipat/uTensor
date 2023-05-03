@@ -105,7 +105,7 @@ void QuantizeMultiplier(double double_multiplier, int32_t* quantized_multiplier,
   int64_t q_fixed = IntegerFrExp(double_multiplier, shift);
 #else   // TFLITE_EMULATE_FLOAT
   const double q = std::frexp(double_multiplier, shift);
-  auto q_fixed = static_cast<int64_t>(std::round(q * (1ll << 31)));
+  auto q_fixed = static_cast<int64_t>(round(q * (1ll << 31)));
 #endif  // TFLITE_EMULATE_FLOAT
   if (q_fixed > (1ll << 31)) {
     Context::get_default_context()->throwError(
@@ -145,7 +145,7 @@ void CalculateActivationRangeQuantizedImpl(TfLiteFusedActivation activation,
       output->get_quantization_params().get_zeroP_for_channel(0);
 
   auto quantize = [scale, zero_point](float f) {
-    return zero_point + static_cast<int32_t>(std::round(f / scale));
+    return zero_point + static_cast<int32_t>(round(f / scale));
   };
 
   if (activation == kTfLiteActRelu) {
